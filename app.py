@@ -99,26 +99,38 @@ if data:
         # Create line chart using plotly
         fig = go.Figure()
         
-        # Add traces
+        # Add traces with matching tag colors
         fig.add_trace(go.Scatter(
             x=df['time'],
             y=df['temp'],
-            name="Temperature",
-            line=dict(color="#4cceac")
+            name="Temperature",  # Label for the temperature line
+            line=dict(color="#4cceac"),
+            marker=dict(color="#4cceac"),  # Match marker color to line color
+            text=df['temp'],  # Display temperature values as tags
+            mode='lines+markers+text',  # Show lines, markers, and text
+            textposition='top center'  # Position text above markers
         ))
         
         fig.add_trace(go.Scatter(
             x=df['time'],
             y=df['hum'],
-            name="Humidity",
-            line=dict(color="#6870fa")
+            name="Humidity",  # Label for the humidity line
+            line=dict(color="#6870fa"),
+            marker=dict(color="#6870fa"),  # Match marker color to line color
+            text=df['hum'],  # Display humidity values as tags
+            mode='lines+markers+text',  # Show lines, markers, and text
+            textposition='top center'  # Position text above markers
         ))
         
         fig.add_trace(go.Scatter(
             x=df['time'],
             y=df['pres'],
-            name="Pressure",
-            line=dict(color="#ffc658")
+            name="Pressure",  # Label for the pressure line
+            line=dict(color="#ffc658"),
+            marker=dict(color="#ffc658"),  # Match marker color to line color
+            text=df['pres'],  # Display pressure values as tags
+            mode='lines+markers+text',  # Show lines, markers, and text
+            textposition='top center'  # Position text above markers
         ))
         
         # Update layout
@@ -131,7 +143,9 @@ if data:
             yaxis=dict(gridcolor="#2e3951"),
             legend=dict(
                 bgcolor="#1F2A40",
-                bordercolor="#e0e0e0"
+                bordercolor="#e0e0e0",
+                title=dict(font=dict(color="#e0e0e0")),  # Legend title color
+                font=dict(color="#e0e0e0")  # Legend text color
             )
         )
         
