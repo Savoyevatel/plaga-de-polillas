@@ -169,7 +169,7 @@ if data:
 
         # Random coefficients for demonstration
         a = 1.2  # Example value for intercept
-        b = 0.5  # Example value for regression factor
+        b = 0.37  # Example value for regression factor
 
         # Calculate Y, K, and t_min
         Y = a + b * temperature
@@ -179,9 +179,8 @@ if data:
         # New block for the development rate
         st.markdown(f"""
             <div class="metric-container" style="background-color: #1F2A40; padding: 10px; border-radius: 10px; margin-top: 20px;">
-                <div class="metric-label" style="color: #4cceac; font-size: 18px; font-weight: bold; text-align: center;">Desarrollo diario de larva de Phthorimaea operculella</div>
+                <div class="metric-label" style="color: #4cceac; font-size: 18px; font-weight: bold; text-align: center;">Los periodos de desarrollo de Phthorimaea operculella</div>
                 <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">Y = {Y:.2f} días</p>
-                <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">t min = {t_min:.2f}</p>
             </p>
             </div>
         """, unsafe_allow_html=True)
