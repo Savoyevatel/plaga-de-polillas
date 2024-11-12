@@ -21,9 +21,7 @@ def fetch_weather_data():
         data = response.json()
         # Sort data by createdAt in descending order
         sorted_data = sorted(data, key=lambda x: datetime.strptime(x['createdAt'], '%Y-%m-%d %H:%M:%S'), reverse=True)
-        # Filter for temperatures greater than 25 °C
-        filtered_data = [entry for entry in sorted_data if entry['temp'] > 25]
-        return filtered_data[:10][::-1]  # Get latest 10 entries and reverse to chronological order
+        return sorted_data[:10][::-1]  # Get latest 10 entries and reverse to chronological order
     except Exception as e:
         st.error(f"Error fetching data: {e}")
         return []
@@ -62,12 +60,12 @@ if data:
     
     # Display metrics
     with col1:
-        st.markdown(f"""
+        st.markdown("""
             <div class="metric-container">
                 <div class="metric-label">Temperatura</div>
-                <div class="metric-value">🌡️ {latest['temp']}°C</div>
+                <div class="metric-value">🌡️ {}°C</div>
             </div>
-        """, unsafe_allow_html=True)
+        """.format(latest['temp']), unsafe_allow_html=True)
     
     with col2:
         # Custom humidity gauge
@@ -148,69 +146,31 @@ if data:
         """.format(latest['temp'], latest['hum'], latest['pres']), unsafe_allow_html=True)
 
         # New block for the equations
-    
-
-        # Given values
-        temperature = latest['temp'] # Temperature in °C
-
-        # Random coefficients for demonstration
-        a = 1.2  # Example value for intercept
-        b = 0.5  # Example value for regression factor
-
-        # Calculate Y, K, and t_min
-        Y = a + b * temperature
-        K = 1 / b
-        t_min = -a / b
-
-        # New block for the development rate
-        st.markdown(f"""
+        st.markdown("""
             <div class="metric-container" style="background-color: #1F2A40; padding: 10px; border-radius: 10px; margin-top: 20px;">
                 <div class="metric-label" style="color: #4cceac; font-size: 18px; font-weight: bold; text-align: center;">Desarrollo diario de larva de Phthorimaea operculella</div>
-                <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">Y = {Y:.2f} días</p>
-                <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">t min = {t_min:.2f}</p>
-            </p>
+                <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">Y = a + bX</p>
+                <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">K = 1 / b</p>
+                <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">t min = - a / b</p>
+                <p style="color: #e0e0e0; text-align: justify; margin-top: 10px;">Y: Tasa de desarrollo diario. <br>
+                a: Intercepción.<br>
+                b: Factor de regresión (slope)<br>
+                X: Temperatura (°C) <br>
+                tmin: Temperatura de umbral mínima (°C)</p>
             </div>
         """, unsafe_allow_html=True)
 
-        # Assuming latest values are available
-        temperature = latest['temp']  # Example: 25°C
-        humidity = latest['hum']       # Example: 60%
-        pressure = latest['pres']      # Example: 1013 hPa
-
-        # Random coefficients for demonstration
-        alpha = 0.01
-        beta = 0.005
-        gamma = 0.02
-        delta = 1
-
-        # Calculate PLI
-        PLI = alpha * temperature + beta * humidity + gamma/pressure + delta
-
-        # New block for PLI Calculation
-        st.markdown(f"""
+        # New block for Moth Activity Score
+        st.markdown("""
             <div class="metric-container" style="background-color: #1F2A40; padding: 10px; border-radius: 10px; margin-top: 20px;">
                 <div class="metric-label" style="color: #4cceac; font-size: 18px; font-weight: bold; text-align: center;">IPPO (Índice de probabilidad de Phthorimaea operculella)</div>
-                <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">IPPO = {PLI:.2f}<br>
-                Cuando IPPO > 1.5 ocurren las infestaciones</p>
+                <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">PLI = α ⋅ T + β ⋅ H + γ ⋅ P</p>
+                <p style="color: #e0e0e0; text-align: justify; margin-top: 10px;">T: Temperatura (°C).<br>
+                H: Humedad (%).<br>
+                P: Indicador binario de presión estable (1 para estable, 0 para inestable).<br>
+                α, β, γ: Coeficientes que ponderan la importancia de cada factor. </p>
             </div>
         """, unsafe_allow_html=True)
-
-        # Assuming latest values are available
-        temperature = latest['temp']  # Example: 25°C
-        humidity = latest['hum']       # Example: 60%
-        pressure = latest['pres']      # Example: 1013 hPa
-
-        # Random coefficients for demonstration
-        a = 0.4
-        b = 0.3
-        c = 0.2
-        d = 1.0
-
-        # Calculate Moth Activity Score
-        moth_activity_score = a * temperature + b * humidity + c * pressure + d
-
-        # New block for Moth Activity Score Calculation
-
 
 else:
     st.error("No data available")
