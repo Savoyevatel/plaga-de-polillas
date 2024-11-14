@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime
+import numpy as np
 
 # Set page config
 st.set_page_config(
@@ -92,6 +93,11 @@ if data:
     df['createdAt'] = pd.to_datetime(df['createdAt'])
     df['time'] = df['createdAt'].dt.strftime('%H:%M:%S')
     
+    # Normalize the data
+    df['temp_normalized'] = (df['temp'] - df['temp'].min()) / (df['temp'].max() - df['temp'].min())
+    df['hum_normalized'] = (df['hum'] - df['hum'].min()) / (df['hum'].max() - df['hum'].min())
+    df['pres_normalized'] = (df['pres'] - df['pres'].min()) / (df['pres'].max() - df['pres'].min())
+    
     # Create two columns for chart and description
     col_chart, col_desc = st.columns([2, 1])
     
@@ -99,10 +105,10 @@ if data:
         # Create line chart using plotly
         fig = go.Figure()
         
-        # Add traces with matching tag colors
+        # Add traces with normalized data
         fig.add_trace(go.Scatter(
             x=df['time'],
-            y=df['temp'],
+            y=df['temp_normalized'],
             name="Temperature",  # Label for the temperature line
             line=dict(color="#4cceac"),
             marker=dict(color="#4cceac"),  # Match marker color to line color
@@ -113,7 +119,7 @@ if data:
         
         fig.add_trace(go.Scatter(
             x=df['time'],
-            y=df['hum'],
+            y=df['hum_normalized'],
             name="Humidity",  # Label for the humidity line
             line=dict(color="#6870fa"),
             marker=dict(color="#6870fa"),  # Match marker color to line color
@@ -124,7 +130,7 @@ if data:
         
         fig.add_trace(go.Scatter(
             x=df['time'],
-            y=df['pres'],
+            y=df['pres_normalized'],
             name="Pressure",  # Label for the pressure line
             line=dict(color="#ffc658"),
             marker=dict(color="#ffc658"),  # Match marker color to line color
@@ -135,7 +141,7 @@ if data:
         
         # Update layout
         fig.update_layout(
-            title="Temperature, Humidity, and Pressure Trends",
+            title="Normalized Temperature, Humidity, and Pressure Trends",
             plot_bgcolor="#1F2A40",
             paper_bgcolor="#1F2A40",
             font=dict(color="#e0e0e0"),
@@ -179,7 +185,7 @@ if data:
         # New block for the development rate
         st.markdown(f"""
             <div class="metric-container" style="background-color: #1F2A40; padding: 10px; border-radius: 10px; margin-top: 20px;">
-                <div class="metric-label" style="color: #4cceac; font-size: 18px; font-weight: bold; text-align: center;">Los periodos de desarrollo de Phthorimaea operculella</div>
+                <div class="metric-label" style="color: #4cceac; font-size: 18px; font-weight: bold; text-align: center;">Los periodos de desarrollo de Polilla de la Papa</div>
                 <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">Y = {Y:.2f} días</p>
             </p>
             </div>
@@ -202,7 +208,7 @@ if data:
         # New block for PLI Calculation
         st.markdown(f"""
             <div class="metric-container" style="background-color: #1F2A40; padding: 10px; border-radius: 10px; margin-top: 20px;">
-                <div class="metric-label" style="color: #4cceac; font-size: 18px; font-weight: bold; text-align: center;">IPPO (Índice de probabilidad de Phthorimaea operculella)</div>
+                <div class="metric-label" style="color: #4cceac; font-size: 18px; font-weight: bold; text-align: center;">IPPO (Índice de probabilidad de Polilla de la Papa)</div>
                 <p style="color: #e0e0e0; text-align: center; font-size: 20px; font-weight: bold;">IPPO = {PLI:.2f}<br>
                 Cuando IPPO > 1.5 ocurren las infestaciones</p>
             </div>
